@@ -1,0 +1,6 @@
+@ShopyStock.API_HostAddress = http://localhost:5078
+
+GET {{ShopyStock.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
