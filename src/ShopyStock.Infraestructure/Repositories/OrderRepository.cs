@@ -5,11 +5,9 @@ namespace ShopyStock.Infraestructure.Repositories;
 
 public class OrderRepository : IOrderRepository
 {
-    private readonly IUnitOfWork _unitOfWork;
 
-    public OrderRepository(IUnitOfWork unitOfWork)
+    public OrderRepository()
     {
-        _unitOfWork = unitOfWork;
     }
     
     public Task<Order> AddAsync(Order entity, CancellationToken cancellationToken = default)

@@ -11,7 +11,16 @@
         <PackageReference Include="FluentValidation" Version="12.2.0" />
         <PackageReference Include="Mapster" Version="10.1.0-pre04" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.32" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.32">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.32" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.32" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.32">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
@@ -22,8 +31,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
       <Folder Include="Middlewares\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ShopyStock.Application\ShopyStock.Application.csproj" />
+      <ProjectReference Include="..\ShopyStock.Domain\ShopyStock.Domain.csproj" />
+      <ProjectReference Include="..\ShopyStock.Infraestructure\ShopyStock.Infraestructure.csproj" />
     </ItemGroup>
 
 </Project>

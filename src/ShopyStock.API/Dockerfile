@@ -8,6 +8,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ShopyStock.API/ShopyStock.API.csproj", "ShopyStock.API/"]
+COPY ["ShopyStock.Domain/ShopyStock.Domain.csproj", "ShopyStock.Domain/"]
+COPY ["ShopyStock.Infraestructure/ShopyStock.Infraestructure.csproj", "ShopyStock.Infraestructure/"]
+COPY ["ShopyStock.Application/ShopyStock.Application.csproj", "ShopyStock.Application/"]
 RUN dotnet restore "ShopyStock.API/ShopyStock.API.csproj"
 COPY . .
 WORKDIR "/src/ShopyStock.API"

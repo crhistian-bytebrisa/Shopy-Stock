@@ -1,21 +1,36 @@
+using Microsoft.EntityFrameworkCore;
+using ShopyStock.Domain.Interfaces.Repositories;
+using ShopyStock.Infraestructure.Context;
+using ShopyStock.Infraestructure.Repositories;
+
 namespace ShopyStock.API;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public async static Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
+        builder.Services.AddDbContext<StockDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
+        
+        //Actualizacion de la DB a la hora de desplegar, lo hice para el despliegue con Docker
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<StockDbContext>();
+            await dbContext.Database.MigrateAsync();
+        }
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

@@ -5,11 +5,9 @@ namespace ShopyStock.Infraestructure.Repositories;
 
 public class ProductRepository : IProductRepository
 {
-    private readonly IProductRepository _productRepository;
 
-    public ProductRepository(IProductRepository productRepository)
+    public ProductRepository()
     {
-        _productRepository = productRepository;
     }
     public Task<Product> AddAsync(Product entity, CancellationToken cancellationToken = default)
     {
