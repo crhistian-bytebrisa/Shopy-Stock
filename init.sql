@@ -50,5 +50,23 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
 
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name', N'Price', N'Stock') AND [object_id] = OBJECT_ID(N'[Products]'))
+    SET IDENTITY_INSERT [Products] ON;
+INSERT INTO [Products] ([Id], [Name], [Price], [Stock])
+VALUES (1, N'Laptop Lenovo P14S 2da Gen', 35000.0, 10),
+(2, N'Mouse Logitech G Pro', 6700.0, 15),
+(3, N'Teclado Mecanico Krom Kasic TKL', 16000.0, 15);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name', N'Price', N'Stock') AND [object_id] = OBJECT_ID(N'[Products]'))
+    SET IDENTITY_INSERT [Products] OFF;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20261024154843_AddSeedDataProductsAndOrders', N'8.0.32');
+GO
+
+COMMIT;
+GO
 

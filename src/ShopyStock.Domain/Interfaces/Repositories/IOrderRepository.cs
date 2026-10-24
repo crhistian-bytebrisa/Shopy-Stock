@@ -4,7 +4,7 @@ namespace ShopyStock.Domain.Interfaces.Repositories;
 
 public interface IOrderRepository : IBaseRepository<Order>
 {
-    Task<IEnumerable<Order>> GetAllAsync(
+    Task<(IEnumerable<Order>, int totalCount)> GetAllAsync(
         int pagesize,
         int pageindex,
         DateTime? startdate,

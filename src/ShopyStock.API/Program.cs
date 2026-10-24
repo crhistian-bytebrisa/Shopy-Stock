@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ShopyStock.Application.Interfaces;
+using ShopyStock.Application.Services;
 using ShopyStock.Domain.Interfaces.Repositories;
 using ShopyStock.Infraestructure.Context;
 using ShopyStock.Infraestructure.Repositories;
@@ -17,6 +19,9 @@ public class Program
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IOrderRepository, OrderRepository>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

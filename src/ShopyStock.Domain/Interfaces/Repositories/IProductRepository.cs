@@ -4,7 +4,7 @@ namespace ShopyStock.Domain.Interfaces.Repositories;
 
 public interface IProductRepository : IBaseRepository<Product>
 {
-    Task<IEnumerable<Product>> GetAllAsync(
+    Task<(IEnumerable<Product>, int totalCount)> GetAllAsync(
         int pagesize,
         int pageindex,
         string? name,
@@ -12,5 +12,5 @@ public interface IProductRepository : IBaseRepository<Product>
         decimal? maxprice,
         CancellationToken cancellationToken = default);
     
-    Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 }

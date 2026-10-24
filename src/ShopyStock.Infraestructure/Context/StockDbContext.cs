@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShopyStock.Domain.Entities;
+using ShopyStock.Infraestructure.Context.SeedData;
 
 namespace ShopyStock.Infraestructure.Context;
 
@@ -31,6 +32,8 @@ public class StockDbContext : DbContext
         modelBuilder.Entity<Order>()
             .Property(o => o.TotalPrice)
             .HasPrecision(18, 2);
+
+        modelBuilder.ApplyConfiguration(new ProductsSeed());
         
         base.OnModelCreating(modelBuilder);
     }

@@ -87,6 +87,29 @@ namespace ShopyStock.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Laptop Lenovo P14S 2da Gen",
+                            Price = 35000m,
+                            Stock = 10
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Mouse Logitech G Pro",
+                            Price = 6700m,
+                            Stock = 15
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Teclado Mecanico Krom Kasic TKL",
+                            Price = 16000m,
+                            Stock = 15
+                        });
                 });
 
             modelBuilder.Entity("ShopyStock.Domain.Entities.OrderDetails", b =>
