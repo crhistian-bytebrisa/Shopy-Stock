@@ -18,6 +18,10 @@
     <td width="120" align="center" style="padding:10px; border:2px solid #CC2927; border-radius:10px; background-color:#1e1e1e;">
       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" width="50" />
       <br><strong style="color:white;">SQL Server</strong>
+    <td width="120" align="center" style="padding:10px; border:2px solid #2496ED; border-radius:10px; background-color:#1e1e1e;">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="50" />
+      <br><strong style="color:white;">Docker</strong>
+    </td>
     </td>
   </tr>  
 </table>
