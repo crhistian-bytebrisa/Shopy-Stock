@@ -1,14 +1,4 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
-BEGIN
-    CREATE TABLE [__EFMigrationsHistory] (
-        [MigrationId] nvarchar(150) NOT NULL,
-        [ProductVersion] nvarchar(32) NOT NULL,
-        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
-    );
-END;
-GO
-
-BEGIN TRANSACTION;
+﻿BEGIN TRANSACTION;
 GO
 
 CREATE TABLE [Orders] (
@@ -43,13 +33,6 @@ GO
 CREATE INDEX [IX_OrderDetails_ProductId] ON [OrderDetails] ([ProductId]);
 GO
 
-INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20261024140518_InitialCreate', N'8.0.32');
-GO
-
-COMMIT;
-GO
-
 BEGIN TRANSACTION;
 GO
 
@@ -62,11 +45,33 @@ VALUES (1, N'Laptop Lenovo P14S 2da Gen', 35000.0, 10),
 IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name', N'Price', N'Stock') AND [object_id] = OBJECT_ID(N'[Products]'))
     SET IDENTITY_INSERT [Products] OFF;
 GO
+COMMIT;
 
-INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20261024154843_AddSeedDataProductsAndOrders', N'8.0.32');
+BEGIN TRANSACTION;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Date', N'Status', N'TotalPrice') AND [object_id] = OBJECT_ID(N'[Orders]'))
+    SET IDENTITY_INSERT [Orders] ON;
+INSERT INTO [Orders] ([Id], [Date], [Status], [TotalPrice])
+VALUES ('51449123-eede-4982-aa0c-7a618346b174', '2026-10-25T13:15:54.1836181Z', 0, 10000.0);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Date', N'Status', N'TotalPrice') AND [object_id] = OBJECT_ID(N'[Orders]'))
+    SET IDENTITY_INSERT [Orders] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name', N'Price', N'Stock') AND [object_id] = OBJECT_ID(N'[Products]'))
+    SET IDENTITY_INSERT [Products] ON;
+INSERT INTO [Products] ([Id], [Name], [Price], [Stock])
+VALUES (4, N'Mouse Inalambrico Logitech', 5000.0, 13);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name', N'Price', N'Stock') AND [object_id] = OBJECT_ID(N'[Products]'))
+    SET IDENTITY_INSERT [Products] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'OrderId', N'ProductId', N'Quantity', N'UnitPrice') AND [object_id] = OBJECT_ID(N'[OrderDetails]'))
+    SET IDENTITY_INSERT [OrderDetails] ON;
+INSERT INTO [OrderDetails] ([OrderId], [ProductId], [Quantity], [UnitPrice])
+VALUES ('51449123-eede-4982-aa0c-7a618346b174', 4, 2, 5000.0);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'OrderId', N'ProductId', N'Quantity', N'UnitPrice') AND [object_id] = OBJECT_ID(N'[OrderDetails]'))
+    SET IDENTITY_INSERT [OrderDetails] OFF;
 GO
 
 COMMIT;
-GO
-
