@@ -70,4 +70,24 @@ public class ProductRepository : IProductRepository
             .Where(p => ids.Contains(p.Id))
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<bool> ProductOrdered(int id, CancellationToken cancellationToken)
+    {
+        return await _context.OrderDetails
+            .AnyAsync(x => x.ProductId == id, cancellationToken);
+    }
+    
+    public async Task<bool> Exists(int id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Products
+            .AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<bool> Exists(string name, CancellationToken cancellationToken)
+    {
+        name = name.Trim();
+
+        return await _context.Products
+            .AnyAsync(x => x.Name.Trim() == name, cancellationToken);
+    }
 }

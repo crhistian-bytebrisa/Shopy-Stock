@@ -1,13 +1,13 @@
 using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
-using ShopyStock.Application.DTOs;
 using ShopyStock.Application.DTOs.Common;
 using ShopyStock.Application.DTOs.Orders;
+using ShopyStock.Application.DTOs.Request;
 using ShopyStock.Application.Interfaces;
 
 namespace ShopyStock.API.Controllers;
 
-[Route("api/orders")]
+[Route("api/pedidos")]
 public class OrdersController : ControllerBase
 {
     private readonly IOrderService _orderService;

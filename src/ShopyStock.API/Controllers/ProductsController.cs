@@ -1,12 +1,14 @@
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using ShopyStock.Application.DTOs;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ShopyStock.Application.DTOs.Common;
 using ShopyStock.Application.DTOs.Products;
+using ShopyStock.Application.DTOs.Request;
 using ShopyStock.Application.Interfaces;
 
 namespace ShopyStock.API.Controllers;
 
-[Route("api/products")]
+[Route("api/productos")]
 public  class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -38,9 +40,15 @@ public  class ProductsController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult> Patch(int id,UpdateProductDto updateProductDto, CancellationToken cancellationToken)
+    public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<UpdateProductDto>? patchDocument, CancellationToken cancellationToken)
     {
-        await _productService.UpdateEntity(id,updateProductDto, cancellationToken);
+        if (patchDocument == null) return BadRequest();
+    
+        var updateProductDto = new UpdateProductDto();
+    
+        patchDocument.ApplyTo(updateProductDto);
+    
+        await _productService.UpdateEntity(id, updateProductDto, cancellationToken);
         return NoContent();
     }
     

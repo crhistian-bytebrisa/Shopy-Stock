@@ -29,6 +29,13 @@ public class ProductsSeed : IEntityTypeConfiguration<Product>
                 Name = "Teclado Mecanico Krom Kasic TKL",
                 Price = 16000,
                 Stock = 15
+            },
+            new Product
+            {
+                Id = 4,
+                Name = "Mouse Inalambrico Logitech",
+                Price = 5000,
+                Stock = 13
             }
         );
     }

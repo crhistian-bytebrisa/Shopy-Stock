@@ -1,4 +1,4 @@
-namespace ShopyStock.Application.DTOs;
+namespace ShopyStock.Application.DTOs.Request;
 
 public record RequestOrder
 {

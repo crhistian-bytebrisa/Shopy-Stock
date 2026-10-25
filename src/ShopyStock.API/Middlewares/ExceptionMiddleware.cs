@@ -22,6 +22,7 @@ namespace ShopyStock.API.Middlewares
             }
             catch (StockException e)
             {
+                //Devuelve los errores por pedidos que exceden el stock.
                 _logger.LogError(e, "Ocurrió un error de stock en los pedidos: {Message}", e.Message);
 
                 var errors = new List<string>();
@@ -34,18 +35,31 @@ namespace ShopyStock.API.Middlewares
             }
             catch (KeyNotFoundException e)
             {
+                //Devuelve los errores por Ids.
                 _logger.LogWarning(e, "Recurso no encontrado: {Message}", e.Message);
                 await HandleExceptionAsync(context, e, new List<string> { e.Message });
             }
+            catch (InvalidOperationException e)
+            {
+                //Devuelve los errores de operaciones no permitidas por relaciones de la db.
+                _logger.LogWarning(e, "Operacion invalida: {Message}", e.Message);
+                await HandleExceptionAsync(context, e, new List<string> { e.Message });
+            }
+            catch (ValidationException e)
+            {
+                _logger.LogWarning(e, "Error de validación: {Message}", e.Message);
+                await HandleExceptionAsync(context, e, e.Errors);
+            }
             catch (Exception e)
             {
+                //Errores no controlados
                 _logger.LogError(e, "Ocurrió un error no controlado: {Message}", e.Message);
 
                 var errors = new List<string>();
                 //Para mostrar solo en pruebas
-#if DEBUG
+                #if DEBUG
                 errors.Add(e.Message);
-#endif
+                #endif
 
                 await HandleExceptionAsync(context, e, errors);
             }
@@ -69,6 +83,16 @@ namespace ShopyStock.API.Middlewares
                     break;
 
                 case StockException:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    response.Message = exception.Message;
+                    break;
+                
+                case InvalidOperationException:
+                    response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                    response.Message = exception.Message;
+                    break;
+                
+                case ValidationException:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     response.Message = exception.Message;
                     break;

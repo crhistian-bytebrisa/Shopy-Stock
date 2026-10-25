@@ -24,7 +24,7 @@ public class MappingConfig
             .Map(dest => dest.Products, src => src.OrderDetails);
 
         TypeAdapterConfig<OrderDetails, OrderDetailsProductDto>.NewConfig()
-            .Map(dest => dest.NameProduct, src => src.Product.Name)
+            .Map(dest => dest.NameProduct, src => src.Product != null ? src.Product.Name : "Nombre no registrado.")
             .Map(dest => dest.Quantity, src => src.Quantity)
             .Map(dest => dest.UnitPrice, src => src.UnitPrice)
             .Map(dest => dest.ProductId, src => src.ProductId)

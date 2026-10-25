@@ -1,6 +1,88 @@
-@ShopyStock.API_HostAddress = http://localhost:5078
+@HostAddress = http://localhost:5000
 
-GET {{ShopyStock.API_HostAddress}}/weatherforecast/
+#Endpoint de productos
+
+### Todos los productos
+GET {{HostAddress}}/api/productos?pageIndex=1&pageSize=20
 Accept: application/json
 
-###
+### Productos mayores a 15000
+GET {{HostAddress}}/api/productos?PageIndex=1&PageSize=20&MinPrice=15000
+Accept: application/json
+
+### Primer producto
+GET {{HostAddress}}/api/productos/1
+Accept: application/json
+
+### Nuevo Producto
+POST {{HostAddress}}/api/productos
+Content-Type: application/json
+
+{
+  "name": "Teclado Mecanico Kamaro TG",
+  "price": 2500.00,
+  "stock": 20
+}
+
+### Actualizar un producto
+PATCH {{HostAddress}}/api/productos/1
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/price",
+    "value": 34000.00
+  },
+  {
+    "op": "replace",
+    "path": "/stock",
+    "value": 12
+  }
+]
+
+### Eliminar un producto
+DELETE {{HostAddress}}/api/productos/3
+Accept: application/json
+
+
+# Endpoints de Pedidos
+
+### Todos los pedidos
+GET {{HostAddress}}/api/pedidos
+Accept: application/json
+
+### Obtener un pedido por su ID
+GET {{HostAddress}}/api/pedidos/51449123-eede-4982-aa0c-7a618346b174
+Accept: application/json
+
+### Crear un pedido
+POST {{HostAddress}}/api/pedidos
+Content-Type: application/json
+
+{
+  "details": [
+    {
+      "productId": 1,
+      "quantity": 2
+    },
+    {
+      "productId": 2,
+      "quantity": 1
+    }    
+  ],
+  "status": 0
+}
+
+### Prueba de pedidos excesivos
+POST {{HostAddress}}/api/pedidos
+Content-Type: application/json
+
+{
+  "details": [
+    {
+      "productId": 1,
+      "quantity": 999
+    }
+  ]
+}

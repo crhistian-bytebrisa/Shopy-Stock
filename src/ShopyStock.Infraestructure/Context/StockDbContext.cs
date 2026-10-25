@@ -38,7 +38,8 @@ public class StockDbContext : DbContext
             .HasPrecision(18, 2);
 
         modelBuilder.ApplyConfiguration(new ProductsSeed());
-        
+        modelBuilder.ApplyConfiguration(new OrdersSeed());
+        modelBuilder.ApplyConfiguration(new OrderDetailsSeed());
         base.OnModelCreating(modelBuilder);
     }
     

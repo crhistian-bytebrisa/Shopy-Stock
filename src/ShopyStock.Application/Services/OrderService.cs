@@ -1,24 +1,25 @@
-using Azure.Core;
+using FluentValidation;
 using Mapster;
-using Newtonsoft.Json;
-using ShopyStock.Application.DTOs;
 using ShopyStock.Application.DTOs.Common;
 using ShopyStock.Application.DTOs.Orders;
-using ShopyStock.Application.DTOs.Products;
+using ShopyStock.Application.DTOs.Request;
 using ShopyStock.Application.Interfaces;
 using ShopyStock.Domain.Entities;
 using ShopyStock.Domain.Exceptions;
 using ShopyStock.Domain.Interfaces.Repositories;
+using ValidationException = ShopyStock.Domain.Exceptions.ValidationException;
 
 namespace ShopyStock.Application.Services;
 
 public class OrderService : IOrderService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<CreateOrderDto> _validator;
 
-    public OrderService(IUnitOfWork unitOfWork)
+    public OrderService(IUnitOfWork unitOfWork, IValidator<CreateOrderDto> validator)
     {
         _unitOfWork = unitOfWork;
+        _validator = validator;
     }
     public async Task<PagedResult<OrderDto>> GetAll(RequestOrder request, CancellationToken cancellationToken)
     {
@@ -38,12 +39,23 @@ public class OrderService : IOrderService
     {
         var order = await _unitOfWork.Orders.GetByIdAsync(id, cancellationToken);
         
-        if (order == null) throw new KeyNotFoundException("No existe una Orden con ese identificador");
+        if (order == null) throw new KeyNotFoundException("No se encontro la orden.");
         
         return order.Adapt<OrderResponseDto>();
     }
     public async Task AddEntity(CreateOrderDto createOrderDto, CancellationToken cancellationToken)
     {
+        //Validaciones
+        var validationResult = await _validator.ValidateAsync(createOrderDto, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+            
+            throw new ValidationException(errors);
+        }
+        
+        
         var orderProducts = createOrderDto.Details
             .GroupBy(x => x.ProductId)
             .ToDictionary(g => g.Key, g => g.Sum(x => x.Quantity));

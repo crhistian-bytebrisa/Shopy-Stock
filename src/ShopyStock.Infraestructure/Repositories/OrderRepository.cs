@@ -37,15 +37,16 @@ public class OrderRepository : IOrderRepository
 
         if (startdate != null)
         {
-            query.Where(x => x.Date >= startdate);
+            query = query.Where(x => x.Date >= startdate);
         }
 
         if (enddate != null)
         {
-            query.Where(x => x.Date <= enddate);
+            query = query.Where(x => x.Date <= enddate);
         }
 
         var result = await query.PaginateAsync(pageindex, pagesize);
+        result.Items = result.Items.OrderBy(x => x.Date).ToList();
         return result;
     }
 

@@ -1,6 +1,6 @@
-using ShopyStock.Application.DTOs;
 using ShopyStock.Application.DTOs.Common;
 using ShopyStock.Application.DTOs.Orders;
+using ShopyStock.Application.DTOs.Request;
 
 namespace ShopyStock.Application.Interfaces;
 

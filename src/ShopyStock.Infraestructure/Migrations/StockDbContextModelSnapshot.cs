@@ -41,6 +41,15 @@ namespace ShopyStock.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("51449123-eede-4982-aa0c-7a618346b174"),
+                            Date = new DateTime(2026, 10, 25, 13, 15, 54, 183, DateTimeKind.Utc).AddTicks(6181),
+                            Status = 0,
+                            TotalPrice = 10000m
+                        });
                 });
 
             modelBuilder.Entity("ShopyStock.Domain.Entities.OrderDetails", b =>
@@ -63,6 +72,15 @@ namespace ShopyStock.Infraestructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = new Guid("51449123-eede-4982-aa0c-7a618346b174"),
+                            ProductId = 4,
+                            Quantity = 2,
+                            UnitPrice = 5000m
+                        });
                 });
 
             modelBuilder.Entity("ShopyStock.Domain.Entities.Product", b =>
@@ -109,6 +127,13 @@ namespace ShopyStock.Infraestructure.Migrations
                             Name = "Teclado Mecanico Krom Kasic TKL",
                             Price = 16000m,
                             Stock = 15
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Mouse Inalambrico Logitech",
+                            Price = 5000m,
+                            Stock = 13
                         });
                 });
 
