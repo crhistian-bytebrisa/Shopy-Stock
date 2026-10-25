@@ -18,6 +18,10 @@ public class StockDbContext : DbContext
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
         
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Id)
+            .UseIdentityColumn(seed: 1, increment: 1);
+        
         modelBuilder.Entity<OrderDetails>()
             .HasKey(od => new { od.OrderId, od.ProductId });
 

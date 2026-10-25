@@ -1,6 +1,6 @@
-namespace ShopyStock.Application.DTOs;
+namespace ShopyStock.Application.DTOs.Products;
 
-public class UpdateProductDTO
+public class UpdateProductDto
 {
     public string? Name { get; set; }
     public decimal? Price { get; set; }

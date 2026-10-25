@@ -1,11 +1,12 @@
 using ShopyStock.Application.DTOs;
 using ShopyStock.Application.DTOs.Common;
+using ShopyStock.Application.DTOs.Orders;
 
 namespace ShopyStock.Application.Interfaces;
 
 public interface IOrderService 
 {
-    Task<PagedResult<OrderDTO>> GetAll(RequestProduct request, CancellationToken cancellationToken);
-    Task<OrderResponseDTO> GetById(int id, CancellationToken cancellationToken);
-    Task AddEntity(CreateOrderDTO createOrderDto, CancellationToken cancellationToken);
+    Task<PagedResult<OrderDto>> GetAll(RequestOrder request, CancellationToken cancellationToken);
+    Task<OrderResponseDto?> GetById(Guid id, CancellationToken cancellationToken);
+    Task AddEntity(CreateOrderDto createOrderDto, CancellationToken cancellationToken);
 }

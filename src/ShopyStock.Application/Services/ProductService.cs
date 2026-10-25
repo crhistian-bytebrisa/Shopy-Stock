@@ -1,7 +1,10 @@
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using ShopyStock.Application.DTOs;
 using ShopyStock.Application.DTOs.Common;
+using ShopyStock.Application.DTOs.Products;
 using ShopyStock.Application.Interfaces;
+using ShopyStock.Domain.Entities;
 using ShopyStock.Domain.Interfaces.Repositories;
 
 namespace ShopyStock.Application.Services;
@@ -14,7 +17,7 @@ public class ProductService : IProductService
     {
         _unitOfWork = unitOfWork;
     }
-    public async Task<PagedResult<ProductResponseDTO>> GetAll(RequestProduct request, CancellationToken cancellationToken)
+    public async Task<PagedResult<ProductResponseDto>> GetAll(RequestProduct request, CancellationToken cancellationToken)
     {
         var products = await _unitOfWork.Products.GetAllAsync(
             request.PageSize,
@@ -25,29 +28,84 @@ public class ProductService : IProductService
             cancellationToken
             );
         
-        List<ProductResponseDTO> list = products.Item1.Adapt<List<ProductResponseDTO>>();
+        List<ProductResponseDto> list = products.Item1.Adapt<List<ProductResponseDto>>();
 
-        return new PagedResult<ProductResponseDTO>(request.PageIndex, request.PageSize, products.Item2, list);
+        return new PagedResult<ProductResponseDto>(request.PageIndex, request.PageSize, products.Item2, list);
     }
 
-    public async Task<ProductResponseDTO> GetById(int id, CancellationToken cancellationToken)
+    public async Task<ProductResponseDto?> GetById(int id, CancellationToken cancellationToken)
     {
         var product = await _unitOfWork.Products.GetByIdAsync(id, cancellationToken);
-        return product.Adapt<ProductResponseDTO>();
+        
+        if (product == null) throw new KeyNotFoundException("No existe un Producto con ese identificador");
+        
+        return product.Adapt<ProductResponseDto>();
     }
 
-    public async Task AddEntity(CreateProductDTO CProductDTO, CancellationToken cancellationToken)
+    public async Task AddEntity(CreateProductDto createProductDto, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _unitOfWork.BeginTransactionAsync(cancellationToken);
+        
+        try
+        {
+            await _unitOfWork.Products.AddAsync(createProductDto.Adapt<Product>(),cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    public async Task UpdateEntity(UpdateProductDTO updateProductDTO, CancellationToken cancellationToken)
+    public async Task UpdateEntity(int id, UpdateProductDto updateProductDto, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var product = await _unitOfWork.Products.GetByIdAsync(id, cancellationToken);
+
+        if (product == null)
+        {
+            throw new KeyNotFoundException("No se encontro el producto.");
+        }
+        
+        updateProductDto.Adapt(product);
+        
+        await _unitOfWork.BeginTransactionAsync(cancellationToken);
+        
+        try
+        {
+            _unitOfWork.Products.Update(product);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task DeleteEntity(int id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var product = await _unitOfWork.Products.GetByIdAsync(id, cancellationToken);
+
+        if (product == null)
+        {
+            throw new KeyNotFoundException("No se encontro el producto.");
+        }
+        
+        await _unitOfWork.BeginTransactionAsync(cancellationToken);
+
+        try
+        {
+            _unitOfWork.Products.Delete(product);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

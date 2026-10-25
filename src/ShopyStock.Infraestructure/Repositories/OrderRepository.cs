@@ -22,7 +22,7 @@ public class OrderRepository : IOrderRepository
 
     public void Update(Order entity)
     {
-        throw new NotImplementedException();
+        _context.Orders.Update(entity);
     }
 
     public void Delete(Order entity)
@@ -30,7 +30,7 @@ public class OrderRepository : IOrderRepository
         _context.Orders.Remove(entity);
     }
 
-    public async Task<(IEnumerable<Order>, int totalCount)> GetAllAsync(int pagesize, int pageindex, DateTime? startdate, DateTime? enddate,
+    public async Task<(IEnumerable<Order>, int totalCount)> GetAllAsync(int pageindex, int pagesize, DateTime? startdate, DateTime? enddate,
         CancellationToken cancellationToken = default)
     {
         var query = _context.Orders.AsQueryable();
@@ -53,6 +53,8 @@ public class OrderRepository : IOrderRepository
     {
         return await _context.Orders
             .AsNoTracking()
+            .Include(x => x.OrderDetails)
+            .ThenInclude(od => od.Product)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 }

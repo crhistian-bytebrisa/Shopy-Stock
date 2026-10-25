@@ -13,8 +13,6 @@
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes:
-      - mssql_data:/var/opt/mssql
     restart: unless-stopped
 
   shopystock.api:
@@ -30,6 +28,3 @@
     depends_on:
       sqlserver:
         condition: service_healthy
-
-volumes:
-  mssql_data:

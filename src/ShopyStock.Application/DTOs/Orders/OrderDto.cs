@@ -1,9 +1,9 @@
 using ShopyStock.Domain.Enum;
 
-namespace ShopyStock.Application.DTOs;
+namespace ShopyStock.Application.DTOs.Orders;
 
-public record OrderDTO(
-    int Id, 
+public record OrderDto(
+    Guid Id, 
     DateTime Date,
     decimal TotalPrice, 
     OrderStatus Status

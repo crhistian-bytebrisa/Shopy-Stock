@@ -35,7 +35,7 @@ public class ProductRepository : IProductRepository
         var query = _context.Products.AsQueryable();
         if (name != null)
         {
-            query = query.Where(x => x.Name.Contains(name));
+            query = query.Where(x => x.Name.ToLower().Trim().Contains(name.ToLower().Trim()));
         }
 
         if (minprice != null)
@@ -57,5 +57,17 @@ public class ProductRepository : IProductRepository
         return await _context.Products
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<List<Product>> GetListProducts(List<int> ids, CancellationToken cancellationToken = default)
+    {
+        if (ids == null || !ids.Any())
+        {
+            throw new KeyNotFoundException("Debes ingresar los productos.");
+        }
+
+        return await _context.Products
+            .Where(p => ids.Contains(p.Id))
+            .ToListAsync(cancellationToken);
     }
 }
